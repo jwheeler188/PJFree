@@ -1,0 +1,38 @@
+<html><body style="font-family:Arial,sans-serif;font-size:13px">
+<h2>PJFree - PJLink Projector (Class 1)</h2>
+<p><b>Free PJLink projector control for Control4.</b> Source, updates and bug reports: <a href="https://github.com/jwheeler188/PJFree">github.com/jwheeler188/PJFree</a></p>
+<p>Generic IP driver for any projector that supports PJLink (Epson, Sony, NEC/Sharp, Panasonic, Optoma, Hitachi/Maxell, Canon, Christie, BenQ, etc.). TCP port 4352.</p>
+
+<p><i>AI code generation was used in the production and testing of this driver. No warranty is provided; please report bugs at github.com/jwheeler188/PJFree/issues so the driver can be improved. Public domain (The Unlicense).</i></p>
+<p>Tested on Control4 with a Panasonic PT-VMZ51S. Should work with any PJLink projector: run <b>List Projector Inputs</b> to see the available input codes, then edit the PJLink Code properties.</p>
+
+<h3>Setup</h3>
+<ol>
+<li>Enable PJLink on the projector (network menu). Note the PJLink password if one is set. Make sure network standby / "standby mode: communication on" is enabled so the projector answers while off.</li>
+<li>Enter the projector's <b>IP Address</b> in properties (or bind it under Connections &gt; Network).</li>
+<li>Enter the <b>Password</b> if PJLink authentication is on. Leave blank if off.</li>
+<li>Bind video sources to the HDMI / RGB / Video inputs under Connections &gt; Control/AV, and add the projector as the room's video endpoint.</li>
+<li>Press <b>Query Status</b> to confirm Projector Name, Power State and Lamp Hours populate.</li>
+</ol>
+
+<h3>Input codes</h3>
+<p>Each input's <b>PJLink Code</b> property sets what is sent for INPT. Standard ranges: 1x = RGB, 2x = Video, 3x = Digital (HDMI/DVI/HDBaseT), 4x = Storage, 5x = Network. Defaults are HDMI1=31, HDMI2=32, HDMI3=33, RGB=11, Video=21, LAN=51. Run the <b>List Projector Inputs</b> action with Lua output open to see the codes your projector actually reports, then adjust.</p>
+
+<h3>Properties</h3>
+<ul>
+<li><b>Send Auth With Every Command</b> - leave No (per spec). Set Yes only if a projector rejects the second command in a session with ERRA.</li>
+<li><b>Poll Interval</b> - 0 disables polling. Polls power (and input when on); lamp/error status every 10th poll.</li>
+<li><b>Debug Mode</b> - prints TX/RX to the Lua output window.</li>
+</ul>
+
+<h3>Programming</h3>
+<p>Commands: Power On, Power Off, AV Mute On, AV Mute Off, Send PJLink Command (e.g. <code>AVMT 31</code>, <code>POWR ?</code> - no %1 prefix needed).</p>
+<p>Variables: POWER_STATE, POWER_ON, INPUT, AV_MUTE, LAMP_HOURS, ERROR_STATUS.</p>
+
+<h3>Notes</h3>
+<ul>
+<li>Selecting a source while the projector is off powers it on, and the input command is retried every 5 s (up to ~2 min) while the projector reports busy (ERR3) during warm-up.</li>
+<li>Warming up counts as ON and cooling as OFF for the room.</li>
+<li>The driver connects on demand and drops the socket when idle, which avoids the projector's 30-second idle timeout.</li>
+</ul>
+</body></html>

@@ -1,0 +1,299 @@
+<devicedata>
+  <copyright>Public domain (The Unlicense)</copyright>
+  <creator>PJFree (github.com/jwheeler188/PJFree)</creator>
+  <manufacturer>PJFree</manufacturer>
+  <name>PJFree PJLink Projector</name>
+  <model>PJLink Class 1 Projector</model>
+  <created>10/14/2026 12:00 PM</created>
+  <modified>10/14/2026 12:30 PM</modified>
+  <version>5</version>
+  <control>lua_gen</control>
+  <controlmethod>ip</controlmethod>
+  <driver>DriverWorks</driver>
+  <minimum_os_version>3.0.0</minimum_os_version>
+  <proxies qty="1">
+    <proxy proxybindingid="5001" name="Projector">tv</proxy>
+  </proxies>
+  <capabilities>
+    <has_discrete_input_select>True</has_discrete_input_select>
+    <has_toad_input_select>False</has_toad_input_select>
+    <has_discrete_volume_control>False</has_discrete_volume_control>
+    <has_up_down_volume_control>False</has_up_down_volume_control>
+    <has_toggle_mute_control>False</has_toggle_mute_control>
+    <has_discrete_channel_select>False</has_discrete_channel_select>
+    <has_channel_up_down>False</has_channel_up_down>
+    <has_audio>False</has_audio>
+    <video_provider_count>0</video_provider_count>
+    <video_consumer_count>6</video_consumer_count>
+    <audio_provider_count>0</audio_provider_count>
+    <audio_consumer_count>0</audio_consumer_count>
+  </capabilities>
+  <connections>
+    <connection>
+      <id>5001</id>
+      <facing>6</facing>
+      <connectionname>Projector</connectionname>
+      <type>2</type>
+      <consumer>False</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>False</linelevel>
+      <classes><class><classname>TV</classname></class></classes>
+    </connection>
+    <connection>
+      <id>6001</id>
+      <facing>6</facing>
+      <connectionname>Network</connectionname>
+      <type>4</type>
+      <consumer>False</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>True</linelevel>
+      <classes>
+        <class>
+          <classname>TCP</classname>
+          <ports>
+            <port>
+              <number>4352</number>
+              <auto_connect>False</auto_connect>
+              <monitor_connection>True</monitor_connection>
+              <keep_connection>False</keep_connection>
+              <keep_alive>False</keep_alive>
+            </port>
+          </ports>
+        </class>
+      </classes>
+    </connection>
+    <connection proxybindingid="5001">
+      <id>2000</id>
+      <facing>6</facing>
+      <connectionname>HDMI 1</connectionname>
+      <type>5</type>
+      <consumer>True</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>True</linelevel>
+      <classes><class><classname>HDMI</classname></class></classes>
+    </connection>
+    <connection proxybindingid="5001">
+      <id>2001</id>
+      <facing>6</facing>
+      <connectionname>HDMI 2</connectionname>
+      <type>5</type>
+      <consumer>True</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>True</linelevel>
+      <classes><class><classname>HDMI</classname></class></classes>
+    </connection>
+    <connection proxybindingid="5001">
+      <id>2002</id>
+      <facing>6</facing>
+      <connectionname>Computer 1</connectionname>
+      <type>5</type>
+      <consumer>True</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>True</linelevel>
+      <classes><class><classname>VGA</classname></class></classes>
+    </connection>
+    <connection proxybindingid="5001">
+      <id>2003</id>
+      <facing>6</facing>
+      <connectionname>Computer 2</connectionname>
+      <type>5</type>
+      <consumer>True</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>True</linelevel>
+      <classes><class><classname>VGA</classname></class></classes>
+    </connection>
+    <connection proxybindingid="5001">
+      <id>2004</id>
+      <facing>6</facing>
+      <connectionname>Memory Viewer</connectionname>
+      <type>5</type>
+      <consumer>True</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>True</linelevel>
+      <classes><class><classname>HDMI</classname></class></classes>
+    </connection>
+    <connection proxybindingid="5001">
+      <id>2005</id>
+      <facing>6</facing>
+      <connectionname>Network / USB</connectionname>
+      <type>5</type>
+      <consumer>True</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>True</linelevel>
+      <classes><class><classname>HDMI</classname></class></classes>
+    </connection>
+    <connection proxybindingid="5001">
+      <id>7000</id>
+      <facing>6</facing>
+      <connectionname>Video End-Point</connectionname>
+      <type>7</type>
+      <consumer>False</consumer>
+      <audiosource>False</audiosource>
+      <videosource>True</videosource>
+      <linelevel>True</linelevel>
+      <classes><class><classname>VIDEO_SELECTION</classname></class></classes>
+    </connection>
+  </connections>
+  <config>
+    <script file="driver.lua"/>
+    <documentation file="www/documentation.html"/>
+    <properties>
+      <property>
+        <name>Driver Version</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>5</default>
+      </property>
+      <property>
+        <name>IP Address</name>
+        <type>STRING</type>
+        <readonly>false</readonly>
+        <default></default>
+      </property>
+      <property>
+        <name>Password</name>
+        <type>STRING</type>
+        <readonly>false</readonly>
+        <default></default>
+        <password>true</password>
+      </property>
+      <property>
+        <name>Send Auth With Every Command</name>
+        <type>LIST</type>
+        <readonly>false</readonly>
+        <default>No</default>
+        <items><item>No</item><item>Yes</item></items>
+      </property>
+      <property>
+        <name>Poll Interval (seconds)</name>
+        <type>RANGED_INTEGER</type>
+        <readonly>false</readonly>
+        <minimum>0</minimum>
+        <maximum>300</maximum>
+        <default>30</default>
+      </property>
+      <property>
+        <name>Debug Mode</name>
+        <type>LIST</type>
+        <readonly>false</readonly>
+        <default>Off</default>
+        <items><item>Off</item><item>On</item></items>
+      </property>
+      <property>
+        <name>Connection Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Not connected</default>
+      </property>
+      <property>
+        <name>Projector Name</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default></default>
+      </property>
+      <property>
+        <name>Power State</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Unknown</default>
+      </property>
+      <property>
+        <name>Current Input</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Unknown</default>
+      </property>
+      <property>
+        <name>Lamp Hours</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default></default>
+      </property>
+      <property>
+        <name>Error Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default></default>
+      </property>
+      <property>
+        <name>HDMI 1 PJLink Code</name>
+        <type>STRING</type>
+        <readonly>false</readonly>
+        <default>31</default>
+      </property>
+      <property>
+        <name>HDMI 2 PJLink Code</name>
+        <type>STRING</type>
+        <readonly>false</readonly>
+        <default>32</default>
+      </property>
+      <property>
+        <name>Computer 1 PJLink Code</name>
+        <type>STRING</type>
+        <readonly>false</readonly>
+        <default>11</default>
+      </property>
+      <property>
+        <name>Computer 2 PJLink Code</name>
+        <type>STRING</type>
+        <readonly>false</readonly>
+        <default>12</default>
+      </property>
+      <property>
+        <name>Memory Viewer PJLink Code</name>
+        <type>STRING</type>
+        <readonly>false</readonly>
+        <default>41</default>
+      </property>
+      <property>
+        <name>Network / USB PJLink Code</name>
+        <type>STRING</type>
+        <readonly>false</readonly>
+        <default>51</default>
+      </property>
+    </properties>
+    <actions>
+      <action><name>Query Status</name><command>QueryStatus</command></action>
+      <action><name>Power On</name><command>PowerOn</command></action>
+      <action><name>Power Off</name><command>PowerOff</command></action>
+      <action><name>List Projector Inputs (Lua output)</name><command>ListInputs</command></action>
+    </actions>
+    <commands>
+      <command>
+        <name>Power On</name>
+        <description>Power on NAME</description>
+      </command>
+      <command>
+        <name>Power Off</name>
+        <description>Power off NAME</description>
+      </command>
+      <command>
+        <name>AV Mute On</name>
+        <description>Blank picture and audio on NAME</description>
+      </command>
+      <command>
+        <name>AV Mute Off</name>
+        <description>Unblank picture and audio on NAME</description>
+      </command>
+      <command>
+        <name>Send PJLink Command</name>
+        <description>Send PJLink command PARAM1 to NAME</description>
+        <params>
+          <param>
+            <name>Command</name>
+            <type>STRING</type>
+            <default>POWR ?</default>
+          </param>
+        </params>
+      </command>
+    </commands>
+  </config>
+</devicedata>
