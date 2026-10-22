@@ -14,7 +14,7 @@ PJLink is an open standard. Projector manufacturers publish it so any control sy
 
 So it's always been a little strange that the AV integration industry treats drivers like this as trade secrets. Some firms gatekeep their drivers and profiles as "tricks of the trade." Others license a driver once and resell it to every integrator who needs it, at a markup. For an open protocol that fits on an index card, that adds up quickly.
 
-To be fair: if you sell a driver and stand behind it with real support, updates and someone who answers the phone, that's a product, and that's great. The problem is the driver that costs more than a nice HDMI cable, ships with no support, and leaves you on the job site at 4:45 on a Friday reading a forum thread from 2019.
+To be fair: if you sell a driver and stand behind it with real support, updates and someone who answers the phone, that's a product, and that's great. The problem is the driver that costs more than a nice HDMI cable, ships with no support, and leaves you on the job site at 4:45 on a Friday reading a forum thread from 2019. (Keep in mind, this driver has no support, if that makes you uneasy, please use a paid option)
 
 PJFree takes the other route. It's free, it's public domain, and the source is right here. Read it, change it, fix it, and send the fixes back.
 
