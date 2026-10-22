@@ -2,7 +2,7 @@
 
 **Free PJLink projector control for Control4. Built by an integrator, shared with integrators.**
 
-A Control4 DriverWorks driver that controls projectors over **PJLink Class 1** (TCP port 4352). It appears in Composer as a standard TV-type device with discrete video inputs, so sources bind to it and rooms use it as their video end-point like any other display.
+A Control4 DriverWorks driver that controls projectors over **PJLink Class 1** (TCP port 4352). It uses Control4's **projector proxy**, so it appears in Composer as a projector with discrete video inputs, so sources bind to it and rooms use it as their video end-point like any other display.
 
 Fully tested on Control4 (Composer Pro 2026.5.27 / OS 3.4.3), where it worked flawlessly to control a **Panasonic PT-VMZ51S**. It should work with any PJLink projector. Run the **List Projector Inputs** action to see which inputs the projector has, then change the input codes directly in the driver properties.
 
@@ -36,14 +36,16 @@ The bigger point is that when integrators share tools instead of hoarding them, 
 
 The default input set matches the PT-VMZ51S, which reports `11 12 31 32 41 51` to `INST ?`.
 
-| Control4 input | Binding | Class | PJLink code |
+| Control4 input | Binding ID | Class | PJLink code |
 |---|---|---|---|
-| HDMI 1 | 2000 | HDMI | 31 |
-| HDMI 2 | 2001 | HDMI | 32 |
-| Computer 1 | 2002 | VGA | 11 |
-| Computer 2 | 2003 | VGA | 12 |
-| Memory Viewer | 2004 | HDMI | 41 |
-| Network / USB | 2005 | HDMI | 51 |
+| HDMI 1 | 1031 | HDMI | 31 |
+| HDMI 2 | 1032 | HDMI | 32 |
+| Computer 1 | 1011 | VGA | 11 |
+| Computer 2 | 1012 | VGA | 12 |
+| Memory Viewer | 1041 | HDMI | 41 |
+| Network / USB | 1051 | HDMI | 51 |
+
+Binding IDs are in the 1000 range, and the last two digits match the default PJLink code, which makes them easy to read in Lua debug output.
 
 The room binding is **Video End-Point** (7000, `VIDEO_SELECTION`). No audio end-point is included, so room audio isn't routed to the projector's built-in speaker.
 
@@ -54,12 +56,12 @@ PJLink input ranges are: `1x` RGB, `2x` Video, `3x` Digital (HDMI/DVI/HDBaseT), 
 1. On the projector, enable **PJLink** in the network menu. Note the password if PJLink authentication is on.
 2. Set the projector's standby mode so the **network stays active while it's off**. Eco/low-power standby usually disables LAN, and then power-on won't work.
 3. Download `PJFree.c4z` from [Releases](https://github.com/jwheeler188/PJFree/releases) (or this repo). In Composer Pro, go to **Driver > Add or Update Driver** and select it. This step is needed once per PC.
-4. In **System Design > Search**, search for **PJFree** and drag **PJFree PJLink Projector** into the room. It appears as a single **Projector** item, which is the TV proxy. The PJLink properties, actions and Lua tab are all on this item.
+4. In **System Design > Search**, search for **PJFree** and drag **PJFree PJLink Projector** into the room. It appears as a single **Projector** item with a projector icon. The PJLink properties, actions and Lua tab are all on this item.
 5. Set **IP Address** and, if used, **Password**.
 6. Under **Connections > Control/AV**, bind your sources to the projector inputs and set the projector as the room's video end-point.
 7. Press **Query Status** under Actions. Projector Name, Power State and Lamp Hours should populate.
 
-> If you're upgrading from an earlier build where the connections changed, delete the driver and add it fresh. Composer doesn't always pick up new bindings on an in-place update.
+> **Upgrading from v5 or earlier:** v6 moved from the TV proxy to the projector proxy and renumbered the inputs, so delete the old driver and add v6 fresh, then rebind your sources. Composer doesn't always pick up new bindings on an in-place update.
 
 ## Properties
 
@@ -133,8 +135,9 @@ PJLink: RX: INPT=31
 
 ## How it works
 
-- **Proxy:** `tv` on binding 5001. All AV inputs and the room end-point carry `proxybindingid="5001"` so they attach to the proxy device.
-- **No `<combo>` tag.** Including `<combo>True</combo>` in a proxy-based driver stops Composer from creating the TV proxy, and the inputs and room binding then disappear from Connections.
+- **Proxy:** `projector` on binding 5001, with the proxy connection class set to `TV`. This matches Control4's own projector drivers; using a `PROJECTOR` class instead loads the proxy but no inputs. All AV inputs and the room end-point carry `proxybindingid="5001"` so they attach to the proxy device.
+- **Input IDs:** video inputs use the 1000 range. Input selection is looked up by `ID % 1000`, and `INPUT_CHANGED` is reported the same way, following Control4's projector driver convention.
+- **No `<combo>` tag.** Including `<combo>True</combo>` in a proxy-based driver stops Composer from creating the proxy, and the inputs and room binding then disappear from Connections.
 - **Network:** binding 6001, TCP 4352, connected on demand with `C4:NetConnect`.
 - **Session flow:**
   1. Connect, then wait for the `PJLINK 0` (no auth) or `PJLINK 1 <random>` (auth) greeting.
@@ -148,7 +151,7 @@ PJLink: RX: INPT=31
 ```
 driver.xml               Driver definition (proxy, connections, properties, actions, commands)
 driver.lua               Driver logic
-www/documentation.html   Documentation tab shown in Composer
+www/documentation.rtf    Documentation tab shown in Composer (RTF, like Control4's drivers)
 UNLICENSE                Public domain dedication
 ```
 
@@ -164,6 +167,7 @@ zip -r PJFree.c4z driver.xml driver.lua www
 
 | Version | Changes |
 |---|---|
+| 6 | Switched to the projector proxy (projector icon in Composer). Inputs renumbered to the 1000 range. Feedback sent as proxy notifications. Documentation converted to RTF so it renders in Composer. |
 | 5 | Released as **PJFree**. Removed the `combo` flag so Composer creates the TV proxy. Added TV capability flags. Room end-point marked as a video source. |
 | 4 | Inputs trimmed to the PT-VMZ51S set (HDMI 1/2, Computer 1/2, Memory Viewer, Network/USB) |
 | 3 | AV and room connections bound to the proxy (`proxybindingid`) |

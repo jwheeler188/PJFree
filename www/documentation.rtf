@@ -1,0 +1,86 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0\fswiss\fcharset0 Arial;}{\f1\fmodern\fcharset0 Courier New;}}\viewkind4\f0\fs20
+\pard\qc\sb0\sa200\b\fs32 PJFree - PJLink Projector\b0\fs20\par
+\pard\ql\sa120 Free PJLink projector control for Control4.\par
+\pard\ql\sa120 Source, updates and bug reports: https://github.com/jwheeler188/PJFree\par
+\pard\ql\sb240\sa80\b\fs28 Contents\b0\fs20\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab General Notes\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Setup\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Inputs\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Driver Properties\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Driver Actions\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Driver Programming\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Testing from the Lua Tab\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Troubleshooting\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Change Log\par
+\pard\ql\sb240\sa80\b\fs28 General Notes\b0\fs20\par
+\pard\ql\sa120 Generic IP driver for any projector that supports PJLink Class 1 (Epson, Sony, NEC/Sharp, Panasonic, Optoma, Hitachi/Maxell, Canon, Christie, BenQ and others). Control is over TCP port 4352.\par
+\pard\ql\sa120 Fully tested on Control4 with a Panasonic PT-VMZ51S. It should work with any PJLink projector: run the List Projector Inputs action to see which inputs the projector has, then change the input codes directly in the driver properties.\par
+\pard\ql\sa120\i AI code generation was used in the production and testing of this driver. No warranty is provided. Please report bugs at github.com/jwheeler188/PJFree/issues so the driver can be improved. Released into the public domain under The Unlicense.\i0\par
+\pard\ql\sb240\sa80\b\fs28 Setup\b0\fs20\par
+\pard\ql\fi-240\li480\sa40 1.\tab Enable PJLink in the projector's network menu. Note the PJLink password if authentication is on.\par
+\pard\ql\fi-240\li480\sa40 2.\tab Set the projector's standby mode so the network stays active while it is off. Eco or low-power standby usually disables the LAN, and power-on will not work.\par
+\pard\ql\fi-240\li480\sa40 3.\tab Enter the projector's IP Address in the driver properties.\par
+\pard\ql\fi-240\li480\sa40 4.\tab Enter the Password if PJLink authentication is on. Leave it blank if it is off.\par
+\pard\ql\fi-240\li480\sa40 5.\tab In Connections > Control/AV, bind your sources to the projector inputs and set the projector as the room's video end-point.\par
+\pard\ql\fi-240\li480\sa40 6.\tab Run the Query Status action. Projector Name, Power State and Lamp Hours should populate.\par
+\pard\ql\sb240\sa80\b\fs28 Inputs\b0\fs20\par
+\pard\ql\sa120 Each input has a PJLink Code property that sets the INPT code sent for it. Defaults match the Panasonic PT-VMZ51S:\par
+\pard\ql\li240\sa40\b HDMI 1\b0  - 31\par
+\pard\ql\li240\sa40\b HDMI 2\b0  - 32\par
+\pard\ql\li240\sa40\b Computer 1\b0  - 11\par
+\pard\ql\li240\sa40\b Computer 2\b0  - 12\par
+\pard\ql\li240\sa40\b Memory Viewer\b0  - 41\par
+\pard\ql\li240\sa40\b Network / USB\b0  - 51\par
+\pard\ql\sa120 PJLink input ranges: 1x = RGB, 2x = Video, 3x = Digital (HDMI/DVI/HDBaseT), 4x = Storage, 5x = Network. For other projectors, run List Projector Inputs and edit the codes. No driver change is needed.\par
+\pard\ql\sb240\sa80\b\fs28 Driver Properties\b0\fs20\par
+\pard\ql\li240\sa40\b IP Address\b0  - Projector IP address.\par
+\pard\ql\li240\sa40\b Password\b0  - PJLink password. Leave blank if authentication is off.\par
+\pard\ql\li240\sa40\b Send Auth With Every Command\b0  - Leave at No (per spec). Set Yes only if the projector rejects the second command in a session with an authentication error.\par
+\pard\ql\li240\sa40\b Poll Interval (seconds)\b0  - Default 30. Set 0 to disable polling. Lamp and error status are polled every 10th cycle.\par
+\pard\ql\li240\sa40\b Debug Mode\b0  - Prints PJLink TX/RX traffic to the Lua output window.\par
+\pard\ql\li240\sa40\b Connection Status, Projector Name, Power State, Current Input, Lamp Hours, Error Status\b0  - Read-only status.\par
+\pard\ql\li240\sa40\b [Input] PJLink Code\b0  - INPT code sent for each Control4 input.\par
+\pard\ql\sb240\sa80\b\fs28 Driver Actions\b0\fs20\par
+\pard\ql\li240\sa40\b Query Status\b0  - Reads name, power, input, AV mute, error status and lamp hours.\par
+\pard\ql\li240\sa40\b Power On / Power Off\b0  - Discrete power.\par
+\pard\ql\li240\sa40\b List Projector Inputs\b0  - Prints the projector's supported input codes to the Lua output.\par
+\pard\ql\sb240\sa80\b\fs28 Driver Programming\b0\fs20\par
+\pard\ql\sb120\sa40\b\fs22 Commands\b0\fs20\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Power On\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Power Off\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab AV Mute On\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab AV Mute Off\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Send PJLink Command - for example AVMT 31 or INPT 32. Leave out the %1 prefix.\par
+\pard\ql\sb120\sa40\b\fs22 Variables\b0\fs20\par
+\pard\ql\li240\sa40\b POWER_STATE\b0  - Off / On / Cooling / Warming Up\par
+\pard\ql\li240\sa40\b POWER_ON\b0  - 0 / 1 (warming up counts as on)\par
+\pard\ql\li240\sa40\b INPUT\b0  - Current input name\par
+\pard\ql\li240\sa40\b AV_MUTE\b0  - 0 / 1\par
+\pard\ql\li240\sa40\b LAMP_HOURS\b0  - Hours per lamp\par
+\pard\ql\li240\sa40\b ERROR_STATUS\b0  - OK, or a list such as Filter Warning\par
+\pard\ql\sb120\sa40\b\fs22 Behavior\b0\fs20\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Selecting a source while the projector is off powers it on. The input command is retried every 5 seconds (up to about 2 minutes) while the projector reports busy during warm-up.\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab Warming up counts as ON and cooling down counts as OFF for the room.\par
+\pard\ql\fi-240\li480\sa40 \bullet\tab The driver connects on demand and drops the socket when idle, which avoids the projector's 30-second idle timeout.\par
+\pard\ql\sb240\sa80\b\fs28 Testing from the Lua Tab\b0\fs20\par
+\pard\ql\sa120 The Lua Command box runs Lua, not raw PJLink, so wrap commands in Send():\par
+\pard\ql\li480\sa20\f1 Send("INPT 32")   -- switch to HDMI 2\f0\par
+\pard\ql\li480\sa20\f1 Send("POWR ?")    -- query power\f0\par
+\pard\ql\li480\sa20\f1 Send("INST ?")    -- list supported input codes\f0\par
+\pard\ql\li480\sa20\f1 QueryAll()        -- full status refresh\f0\par
+\pard\ql\sa120 Turn on Debug Mode to see the exchange in the Lua output.\par
+\pard\ql\sb240\sa80\b\fs28 Troubleshooting\b0\fs20\par
+\pard\ql\li240\sa40\b No response from projector\b0  - Wrong IP, port 4352 blocked, PJLink disabled, or network standby off.\par
+\pard\ql\li240\sa40\b Authentication error (check password)\b0  - PJLink password does not match the projector.\par
+\pard\ql\li240\sa40\b ERR2 on an input change\b0  - The projector does not use that code. Run List Projector Inputs and fix the code.\par
+\pard\ql\li240\sa40\b ERR3\b0  - Projector is busy (warming, cooling or off). Input and mute commands retry automatically.\par
+\pard\ql\li240\sa40\b Will not power on from off\b0  - Network standby is disabled on the projector.\par
+\pard\ql\li240\sa40\b '=' expected near ... in the Lua output\b0  - A raw PJLink command was typed in the Lua box. Use Send("...").\par
+\pard\ql\sb240\sa80\b\fs28 Change Log\b0\fs20\par
+\pard\ql\li240\sa40\b 6\b0  - Projector proxy build (projector icon). Documentation moved to RTF for Composer.\par
+\pard\ql\li240\sa40\b 5\b0  - Released as PJFree. TV proxy created correctly (combo flag removed).\par
+\pard\ql\li240\sa40\b 4\b0  - Inputs match the PT-VMZ51S.\par
+\pard\ql\li240\sa40\b 3\b0  - AV and room connections bound to the proxy.\par
+\pard\ql\li240\sa40\b 2\b0  - Added room end-point binding.\par
+\pard\ql\li240\sa40\b 1\b0  - Initial PJLink Class 1 driver.\par
+}

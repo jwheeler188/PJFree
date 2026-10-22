@@ -1,5 +1,5 @@
 --[[
-  PJFree - PJLink Projector (Class 1) - Control4 DriverWorks driver - v5
+  PJFree - PJLink Projector (Class 1) - Control4 DriverWorks driver - v6 (projector proxy)
   https://github.com/jwheeler188/PJFree
 
   AI code generation was used in the production and testing of this driver.
@@ -22,14 +22,16 @@ local IDLE_DISCONNECT_MS  = 3000
 local BUSY_RETRY_MS       = 5000   -- retry interval when projector answers ERR3 (warming up)
 local BUSY_MAX_TRIES      = 24     -- ~2 minutes of retries
 
--- Control4 video input binding -> property holding its PJLink INPT code
+-- Video input binding ID mod 1000 -> property holding its PJLink INPT code.
+-- The projector proxy passes inputs as the binding ID (or an offset of it),
+-- so lookups use ID % 1000, the same convention Control4's own drivers use.
 local INPUTS = {
-  [2000] = "HDMI 1 PJLink Code",
-  [2001] = "HDMI 2 PJLink Code",
-  [2002] = "Computer 1 PJLink Code",
-  [2003] = "Computer 2 PJLink Code",
-  [2004] = "Memory Viewer PJLink Code",
-  [2005] = "Network / USB PJLink Code",
+  [31] = "HDMI 1 PJLink Code",
+  [32] = "HDMI 2 PJLink Code",
+  [11] = "Computer 1 PJLink Code",
+  [12] = "Computer 2 PJLink Code",
+  [41] = "Memory Viewer PJLink Code",
+  [51] = "Network / USB PJLink Code",
 }
 
 local POWER_NAMES = { ["0"] = "Off", ["1"] = "On", ["2"] = "Cooling", ["3"] = "Warming Up" }
@@ -99,7 +101,9 @@ local function trim(s)
 end
 
 local function inputCodeFor(binding)
-  local prop = INPUTS[tonumber(binding)]
+  local n = tonumber(binding)
+  if not n then return nil end
+  local prop = INPUTS[n % 1000]
   if not prop then return nil end
   local code = trim(Properties[prop])
   if code == "" then return nil end
@@ -212,7 +216,7 @@ local function UpdatePower(val)
   if on ~= gIsOn then
     gIsOn = on
     C4:SetVariable("POWER_ON", on and "1" or "0")
-    C4:SendToProxy(PROXY_BINDING, on and "ON" or "OFF", {})
+    C4:SendToProxy(PROXY_BINDING, on and "ON" or "OFF", {}, "NOTIFY")
   end
 
   -- poll faster through warm-up / cool-down
@@ -230,7 +234,7 @@ local function UpdateInput(code)
   setProp("Current Input", label .. " (" .. code .. ")")
   C4:SetVariable("INPUT", label)
   if binding then
-    C4:SendToProxy(PROXY_BINDING, "INPUT_CHANGED", { INPUT = binding })
+    C4:SendToProxy(PROXY_BINDING, "INPUT_CHANGED", { INPUT = binding }, "NOTIFY")
   end
 end
 

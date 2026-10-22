@@ -5,14 +5,14 @@
   <name>PJFree PJLink Projector</name>
   <model>PJLink Class 1 Projector</model>
   <created>10/14/2026 12:00 PM</created>
-  <modified>10/14/2026 12:30 PM</modified>
-  <version>5</version>
+  <modified>10/21/2026 9:20 PM</modified>
+  <version>6</version>
   <control>lua_gen</control>
   <controlmethod>ip</controlmethod>
   <driver>DriverWorks</driver>
   <minimum_os_version>3.0.0</minimum_os_version>
   <proxies qty="1">
-    <proxy proxybindingid="5001" name="Projector">tv</proxy>
+    <proxy proxybindingid="5001" name="Projector">projector</proxy>
   </proxies>
   <capabilities>
     <has_discrete_input_select>True</has_discrete_input_select>
@@ -65,7 +65,7 @@
       </classes>
     </connection>
     <connection proxybindingid="5001">
-      <id>2000</id>
+      <id>1031</id>
       <facing>6</facing>
       <connectionname>HDMI 1</connectionname>
       <type>5</type>
@@ -76,7 +76,7 @@
       <classes><class><classname>HDMI</classname></class></classes>
     </connection>
     <connection proxybindingid="5001">
-      <id>2001</id>
+      <id>1032</id>
       <facing>6</facing>
       <connectionname>HDMI 2</connectionname>
       <type>5</type>
@@ -87,7 +87,7 @@
       <classes><class><classname>HDMI</classname></class></classes>
     </connection>
     <connection proxybindingid="5001">
-      <id>2002</id>
+      <id>1011</id>
       <facing>6</facing>
       <connectionname>Computer 1</connectionname>
       <type>5</type>
@@ -98,7 +98,7 @@
       <classes><class><classname>VGA</classname></class></classes>
     </connection>
     <connection proxybindingid="5001">
-      <id>2003</id>
+      <id>1012</id>
       <facing>6</facing>
       <connectionname>Computer 2</connectionname>
       <type>5</type>
@@ -109,7 +109,7 @@
       <classes><class><classname>VGA</classname></class></classes>
     </connection>
     <connection proxybindingid="5001">
-      <id>2004</id>
+      <id>1041</id>
       <facing>6</facing>
       <connectionname>Memory Viewer</connectionname>
       <type>5</type>
@@ -120,7 +120,7 @@
       <classes><class><classname>HDMI</classname></class></classes>
     </connection>
     <connection proxybindingid="5001">
-      <id>2005</id>
+      <id>1051</id>
       <facing>6</facing>
       <connectionname>Network / USB</connectionname>
       <type>5</type>
@@ -144,13 +144,13 @@
   </connections>
   <config>
     <script file="driver.lua"/>
-    <documentation file="www/documentation.html"/>
+    <documentation file="www/documentation.rtf"/>
     <properties>
       <property>
         <name>Driver Version</name>
         <type>STRING</type>
         <readonly>true</readonly>
-        <default>5</default>
+        <default>6</default>
       </property>
       <property>
         <name>IP Address</name>
